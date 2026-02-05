@@ -11,37 +11,18 @@ public class J17 {
         int num1=0;
         boolean isPrime;
 
-        num1=4;
-        isPrime=true;
-        for (int i=2;i<4;i++){
-            if (num1%i==0){
-                isPrime=false;
+        for (int j=4;j<100;j++){
+            num1=j;
+            isPrime=true;
+            for (int i=2;i<j;i++){
+                if (num1%i==0){
+                    isPrime=false;
+                }
+            }
+            if (isPrime==true){
+                primes.add(num1);
             }
         }
-        if (isPrime==true){
-            System.out.println(num1+" is a prime");
-        }
-
-        num1=5;
-        isPrime=true;
-        for (int i=2;i<5;i++){
-            if (num1%i==0){
-                isPrime=false;
-            }
-        }
-        if (isPrime==true){
-            System.out.println(num1+" is a prime");
-        }
-
-        num1=6;
-        isPrime=true;
-        for (int i=2;i<6;i++){
-            if (num1%i==0){
-                isPrime=false;
-            }
-        }
-        if (isPrime==true){
-            System.out.println(num1+" is a prime");
-        }
+        System.out.println(primes);
     }
 }
