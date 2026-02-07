@@ -13,5 +13,13 @@ public class J20 {
             part2=word.substring(0,j);
             System.out.println(part1+part2);
         }
+        for (int j=len1;j>=0;j--){
+            part1="";
+            for (int i=0;i<len1-j;i++){
+                part1=part1+" ";
+            }
+            part2=word.substring(0,j);
+            System.out.println(part1+part2);
+        }
     }
 }
