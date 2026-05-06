@@ -42,6 +42,7 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
         public String getAction() { return action; }
 
         public boolean matches(String trafficData) {
+            if (trafficData == null) return false;
             return trafficData.toLowerCase().contains(signature.toLowerCase());
         }
     }
@@ -62,16 +63,16 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
     }
 
     private void initializeDetectionRules() {
-        detectionRules.add(new DetectionRule("IDS001", "SQL Injection", "HIGH", "BLOCK"));
-        detectionRules.add(new DetectionRule("IDS002", "XSS", "MEDIUM", "ALERT"));
-        detectionRules.add(new DetectionRule("IDS003", "Brute Force", "HIGH", "BLOCK"));
-        detectionRules.add(new DetectionRule("IDS004", "Port Scan", "MEDIUM", "LOG"));
-        detectionRules.add(new DetectionRule("IDS005", "Malware", "CRITICAL", "BLOCK"));
-        detectionRules.add(new DetectionRule("IDS006", "Buffer Overflow", "CRITICAL", "BLOCK"));
-        detectionRules.add(new DetectionRule("IDS007", "Privilege Escalation", "HIGH", "ALERT"));
-        detectionRules.add(new DetectionRule("IDS008", "DoS Attack", "HIGH", "BLOCK"));
-        detectionRules.add(new DetectionRule("IDS009", "Suspicious User Agent", "LOW", "LOG"));
-        detectionRules.add(new DetectionRule("IDS010", "Known Exploit", "CRITICAL", "BLOCK"));
+        detectionRules.add(new DetectionRule("IDS001", "sql injection", "HIGH", "BLOCK"));
+        detectionRules.add(new DetectionRule("IDS002", "xss", "MEDIUM", "ALERT"));
+        detectionRules.add(new DetectionRule("IDS003", "brute force", "HIGH", "BLOCK"));
+        detectionRules.add(new DetectionRule("IDS004", "port scan", "MEDIUM", "LOG"));
+        detectionRules.add(new DetectionRule("IDS005", "malware", "CRITICAL", "BLOCK"));
+        detectionRules.add(new DetectionRule("IDS006", "buffer overflow", "CRITICAL", "BLOCK"));
+        detectionRules.add(new DetectionRule("IDS007", "privilege escalation", "HIGH", "ALERT"));
+        detectionRules.add(new DetectionRule("IDS008", "dos attack", "HIGH", "BLOCK"));
+        detectionRules.add(new DetectionRule("IDS009", "suspicious user agent", "LOW", "LOG"));
+        detectionRules.add(new DetectionRule("IDS010", "known exploit", "CRITICAL", "BLOCK"));
     }
 
     @Override
@@ -87,6 +88,11 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
 
     @Override
     public void applyDefense(Attack attack) {
+        if (attack == null) {
+            System.out.println("[IDS] Invalid attack object received");
+            return;
+        }
+
         System.out.println("\n┌─────────────────────────────────────────────────────────┐");
         System.out.println("│ IDS ANALYZING ATTACK                                     │");
         System.out.println("└─────────────────────────────────────────────────────────┘");
@@ -126,7 +132,7 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
         System.out.println("[IDS] Packet rate: " + (int)(Math.random() * 50000) + " packets/sec");
         System.out.println("[IDS] Anomaly score: 95/100");
         System.out.println("[IDS] Recommended action: Enable rate limiting + SYN cookies");
-        sendAlert("DoS attack detected - traffic volume异常");
+        sendAlert("DoS attack detected - traffic volume abnormal");
     }
 
     private void analyzePhishingAttack() {
@@ -163,6 +169,11 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
 
     // Monitor traffic (simulates real-time monitoring)
     public void monitorTraffic(String trafficData) {
+        if (trafficData == null || trafficData.isEmpty()) {
+            System.out.println("[IDS] No traffic data to monitor");
+            return;
+        }
+
         System.out.println("\n[IDS] Monitoring traffic: " + trafficData.substring(0, Math.min(50, trafficData.length())) + "...");
 
         // Update traffic patterns
@@ -223,7 +234,7 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
     }
 
     // Detect anomalies in traffic patterns
-    public void detectAnomaly() {
+    private void detectAnomaly() {
         // Check for sudden spikes in similar traffic
         for (Map.Entry<String, Integer> entry : trafficPatterns.entrySet()) {
             if (entry.getValue() > 100) {
@@ -277,8 +288,10 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
 
     // Add custom detection rule
     public void addDetectionRule(DetectionRule rule) {
-        detectionRules.add(rule);
-        System.out.println("[IDS] Detection rule added: " + rule.getRuleId());
+        if (rule != null) {
+            detectionRules.add(rule);
+            System.out.println("[IDS] Detection rule added: " + rule.getRuleId());
+        }
     }
 
     // List all detection rules
@@ -287,9 +300,9 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
         System.out.println("│ IDS DETECTION RULES                                     │");
         System.out.println("├─────────────────────────────────────────────────────────┤");
         for (DetectionRule rule : detectionRules) {
-            System.out.printf("│ %-6s │ %-15s │ %-8s │ %-5s │%n",
+            System.out.printf("│ %-6s │ %-20s │ %-8s │ %-5s │%n",
                     rule.getRuleId(),
-                    truncate(rule.getSignature(), 15),
+                    truncate(rule.getSignature(), 20),
                     rule.getSeverity(),
                     rule.getAction());
         }
@@ -307,6 +320,7 @@ public class IntrusionDetectionSystem implements DefenseStrategy {
     }
 
     private String truncate(String str, int length) {
+        if (str == null) return "";
         if (str.length() <= length) return str;
         return str.substring(0, length - 3) + "...";
     }
